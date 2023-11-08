@@ -67,8 +67,6 @@ linters-settings:
         severity: warning
       - name: unreachable-code
         severity: warning
-#      - name: flag-parameter
-#        severity: warning
       - name: unnecessary-stmt
         disabled: true
       - name: struct-tag
@@ -102,14 +100,12 @@ linters:
     - revive
     - ineffassign
     - gosimple
-    - deadcode
     - unparam
     - unused
     - asciicheck
     - dogsled
     - dupl
     - gosec
-    - ifshort
     - whitespace
     - cyclop
     - contextcheck
