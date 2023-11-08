@@ -1,0 +1,26 @@
+{
+    "UsersData":[
+        {
+            "id": 1,
+            "displayName": "Иванов Семен Петрович",
+            "email": "petrovich@mail.ru",
+            "mobilePhone": "+71234567890",
+            "workPhone": "1111"
+        },
+        {
+            "id": 2,
+            "displayName": "Семенов Петр Иванович",
+            "email": "ivanovich@mail.ru",
+            "mobilePhone": "+70987654321",
+            "workPhone": "2222"
+        },
+        {
+            "id": 3,
+            "displayName": "Петров Иван Семенович",
+            "email": "semenovich@mail.ru",
+            "mobilePhone": "+72468013579",
+            "workPhone": "3333"
+        }
+    ]
+}
+       

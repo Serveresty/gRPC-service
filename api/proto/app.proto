@@ -1,0 +1,73 @@
+syntax = "proto3";
+package api;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "./pkg/api";
+
+service DEM {
+   rpc Connection(ConnectionRequest) returns (ConnectionResponse) {}
+   rpc GetInfoAboutUser(GetInfoRequest) returns (GetInfoResponse) {}
+   rpc CheckAbsenceStatus(AbsenceStatusRequest) returns (AbsenceStatusResponse) {}
+}
+
+// rpc Connection ...
+message ConnectionRequest {
+   string login = 1;
+   string password = 2;
+}
+
+message ConnectionResponse {
+   bool isAccessGranted = 1;
+}
+
+// rpc GetInfoAboutUser ...
+message GetInfoRequest {
+   InputUsersData usersData = 1;
+}
+
+message GetInfoResponse {
+   string status = 1;
+   repeated OutputUsersData usersData = 2;
+}
+
+message InputUsersData {
+   repeated int64 id = 1;
+   string name = 2;
+   string workPhone = 3;
+   string email = 4;
+   google.protobuf.Timestamp dateFrom = 5;
+   google.protobuf.Timestamp dateTo = 6;
+}
+
+message OutputUsersData {
+   int64 id = 1;
+   string displayName = 2;
+   string email = 3;
+   string workPhone = 4;
+}
+
+// rpc CheckAbsenceStatus ...
+message AbsenceStatusRequest {
+   InputAbsenceData inputAbsenceData = 1;
+}
+
+message AbsenceStatusResponse {
+   string status = 1;
+   repeated OutputAbsenceData absenceData = 2;
+}
+
+message InputAbsenceData {
+   repeated int64 personIds = 1;
+   google.protobuf.Timestamp dateFrom = 2;
+   google.protobuf.Timestamp dateTo = 3;
+}
+
+message OutputAbsenceData {
+   int64 id = 1;
+   int64 personId = 2;
+   google.protobuf.Timestamp createdDate = 3;
+   google.protobuf.Timestamp dateFrom = 4;
+   google.protobuf.Timestamp dateTo = 5;
+   int64 reasonId = 6;
+}

@@ -1,0 +1,28 @@
+{
+    "AbsenceData": [
+        {
+            "id": 17,
+            "personId": 1,
+            "createdDate": "2023-08-14",
+            "dateFrom": "2023-08-12T00:00:00",
+            "dateTo": "2023-08-12T23:59:59",
+            "reasonId": 1
+        },
+        {
+            "id": 19,
+            "personId": 2,
+            "createdDate": "2023-08-14",
+            "dateFrom": "2023-08-12T00:00:00",
+            "dateTo": "2023-08-12T23:59:59",
+            "reasonId": 1
+        },
+        {
+            "id": 21,
+            "personId": 3,
+            "createdDate": "2023-08-14",
+            "dateFrom": "2023-08-12T00:00:00",
+            "dateTo": "2023-08-12T23:59:59",
+            "reasonId": 1
+        }    
+    ]
+}
