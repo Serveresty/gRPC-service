@@ -5,8 +5,12 @@ type ConnectionData struct {
 	Port string `json:"port"`
 }
 
-type ConnectionArr struct {
-	ConData ConnectionData `json:"connectionData"`
+type ServerConnection struct {
+	ConData ConnectionData `json:"serverConnectionData"`
+}
+
+type ClientConnection struct {
+	ConData ConnectionData `json:"clientConnectionData"`
 }
 
 type AuthData struct {
