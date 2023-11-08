@@ -1,6 +1,13 @@
 {
-    "login": "hiro",
-    "password": "qwerty",
-    "IP": "localhost",
-    "port": "8080"
+    "authData": {
+        "login": "hiro",
+        "password": "qwerty"
+    },
+    "connectionData": {
+        "IP": "localhost",
+        "port": "8080"
+    },
+    "queueData": {
+        "queueSize": 10
+    }
 }
