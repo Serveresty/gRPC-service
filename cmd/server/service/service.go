@@ -65,7 +65,7 @@ func (s *MyDEMServer) GetInfoAboutUser(ctx context.Context, req *api.GetInfoRequ
 
 func (s *MyDEMServer) CheckAbsenceStatus(ctx context.Context, req *api.AbsenceStatusRequest) (*api.AbsenceStatusResponse, error) {
 	if (req.InputAbsenceData) == (&api.InputAbsenceData{}) {
-		usersData, err := getdata.GetAllAbsence() //Другое
+		usersData, err := getdata.GetAllAbsence()
 		if err != nil {
 			return &api.AbsenceStatusResponse{
 				Status:      status.New(codes.NotFound, "").String(),
@@ -74,11 +74,11 @@ func (s *MyDEMServer) CheckAbsenceStatus(ctx context.Context, req *api.AbsenceSt
 		}
 		return &api.AbsenceStatusResponse{
 			Status:      status.New(codes.OK, "").String(),
-			AbsenceData: usersData, //Из другого
+			AbsenceData: usersData,
 		}, nil
 	}
 
-	usersData, err := getdata.GetAbsenceByFilter(req.InputAbsenceData) //Другое
+	usersData, err := getdata.GetAbsenceByFilter(req.InputAbsenceData)
 	if err != nil {
 		return &api.AbsenceStatusResponse{
 			Status:      status.New(codes.NotFound, "").String(),
@@ -88,6 +88,6 @@ func (s *MyDEMServer) CheckAbsenceStatus(ctx context.Context, req *api.AbsenceSt
 
 	return &api.AbsenceStatusResponse{
 		Status:      status.New(codes.OK, "").String(),
-		AbsenceData: usersData, //Из другого
+		AbsenceData: usersData,
 	}, nil
 }
