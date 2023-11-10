@@ -3,6 +3,7 @@ package getdata
 import (
 	"encoding/json"
 	"os"
+	"proteitestcase/internal/server_data/get_data/models"
 	"proteitestcase/pkg/api"
 )
 
@@ -12,14 +13,14 @@ func GetAllAbsence() ([]*api.OutputAbsenceData, error) {
 		return []*api.OutputAbsenceData{}, err
 	}
 
-	var absenceData []*api.OutputAbsenceData
+	var absData models.GotAbsenceData
 
-	err = json.Unmarshal(data, &absenceData)
+	err = json.Unmarshal(data, &absData)
 	if err != nil {
 		return []*api.OutputAbsenceData{}, err
 	}
 
-	return absenceData, nil
+	return absData.AbsenceData, nil
 }
 
 func GetAbsenceByFilter(data *api.InputAbsenceData) ([]*api.OutputAbsenceData, error) {
@@ -28,21 +29,21 @@ func GetAbsenceByFilter(data *api.InputAbsenceData) ([]*api.OutputAbsenceData, e
 		return []*api.OutputAbsenceData{}, err
 	}
 
-	var resultData []*api.OutputAbsenceData
+	var absData models.GotAbsenceData
 
 	for _, element := range absenceData {
 		if data.DateFrom.AsTime().After(element.DateFrom.AsTime()) || data.DateTo.AsTime().Before(element.DateTo.AsTime()) {
-			resultData = append(resultData, element)
+			absData.AbsenceData = append(absData.AbsenceData, element)
 		}
 		for _, elementData := range data.PersonIds {
 			if elementData == element.Id {
-				resultData = append(resultData, element)
+				absData.AbsenceData = append(absData.AbsenceData, element)
 				break
 			}
 		}
 	}
 
-	return resultData, nil
+	return absData.AbsenceData, nil
 }
 
 func GetAbsenceData() ([]byte, error) {

@@ -43,5 +43,22 @@ func runClient() error {
 	fmt.Println("Is access granted: ")
 	fmt.Println(res.IsAccessGranted)
 
+	if res.IsAccessGranted {
+		rs, er := c.GetInfoAboutUser(context.Background(), &api.GetInfoRequest{UsersData: &api.InputUsersData{}})
+		if er != nil {
+			return er
+		}
+		fmt.Println(rs.Status)
+		fmt.Println(rs.UsersData)
+	}
+
+	rrs, e := c.CheckAbsenceStatus(context.Background(), &api.AbsenceStatusRequest{InputAbsenceData: &api.InputAbsenceData{}})
+	if e != nil {
+		return e
+	}
+
+	fmt.Println(rrs.Status)
+	fmt.Println(rrs.AbsenceData)
+
 	return nil
 }

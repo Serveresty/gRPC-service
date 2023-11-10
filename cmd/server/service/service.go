@@ -35,7 +35,7 @@ func (s *MyDEMServer) Connection(_ context.Context, req *api.ConnectionRequest) 
 }
 
 func (s *MyDEMServer) GetInfoAboutUser(ctx context.Context, req *api.GetInfoRequest) (*api.GetInfoResponse, error) {
-	if (req.UsersData) == (&api.InputUsersData{}) {
+	if (req.UsersData.Id == nil) && (req.UsersData.Name == "") && (req.UsersData.Email == "") && (req.UsersData.WorkPhone == "") {
 		usersData, err := getdata.GetAllUsers()
 		if err != nil {
 			return &api.GetInfoResponse{

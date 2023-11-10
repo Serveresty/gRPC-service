@@ -3,6 +3,7 @@ package getdata
 import (
 	"encoding/json"
 	"os"
+	"proteitestcase/internal/server_data/get_data/models"
 	"proteitestcase/pkg/api"
 )
 
@@ -12,14 +13,14 @@ func GetAllUsers() ([]*api.OutputUsersData, error) {
 		return []*api.OutputUsersData{}, err
 	}
 
-	var usersData []*api.OutputUsersData
+	var dt models.GotUsersData
 
-	err = json.Unmarshal(data, &usersData)
+	err = json.Unmarshal(data, &dt)
 	if err != nil {
 		return []*api.OutputUsersData{}, err
 	}
 
-	return usersData, nil
+	return dt.UsersData, nil
 }
 
 func GetUsersByFilter(data *api.InputUsersData) ([]*api.OutputUsersData, error) {
@@ -28,21 +29,21 @@ func GetUsersByFilter(data *api.InputUsersData) ([]*api.OutputUsersData, error) 
 		return []*api.OutputUsersData{}, err
 	}
 
-	var resultData []*api.OutputUsersData
+	var dt models.GotUsersData
 
 	for _, element := range usersData {
 		if (data.Name == element.DisplayName) || (data.WorkPhone == element.WorkPhone) || (data.Email == element.Email) {
-			resultData = append(resultData, element)
+			dt.UsersData = append(dt.UsersData, element)
 		}
 		for _, elementData := range data.Id {
 			if elementData == element.Id {
-				resultData = append(resultData, element)
+				dt.UsersData = append(dt.UsersData, element)
 				break
 			}
 		}
 	}
 
-	return resultData, nil
+	return dt.UsersData, nil
 }
 
 func GetUsersData() ([]byte, error) {
