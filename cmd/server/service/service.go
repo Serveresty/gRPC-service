@@ -15,7 +15,7 @@ type MyDEMServer struct {
 	api.UnimplementedDEMServer
 }
 
-func (s *MyDEMServer) Connection(ctx context.Context, req *api.ConnectionRequest) (*api.ConnectionResponse, error) {
+func (s *MyDEMServer) Connection(_ context.Context, req *api.ConnectionRequest) (*api.ConnectionResponse, error) {
 	login, password, err := config.GetAuthData()
 	if err != nil {
 		return &api.ConnectionResponse{
