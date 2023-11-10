@@ -1,24 +1,14 @@
 package main
 
 import (
-	"context"
 	"log"
 	"net"
+	"proteitestcase/cmd/server/service"
 	"proteitestcase/internal/config"
 	"proteitestcase/pkg/api"
 
 	"google.golang.org/grpc"
 )
-
-type myDEMServer struct {
-	api.UnimplementedDEMServer
-}
-
-func Connection(context.Context, *api.ConnectionRequest) (*api.ConnectionResponse, error) {
-	return &api.ConnectionResponse{
-		IsAccessGranted: true,
-	}, nil
-}
 
 func main() {
 	if err := runServer(); err != nil {
@@ -31,17 +21,18 @@ func runServer() error {
 	if err1 != nil {
 		return err1
 	}
+
 	listener, err := net.Listen("tcp", address)
 	if err != nil {
 		return err
 	}
 
 	serverRegistrar := grpc.NewServer()
-	service := &myDEMServer{}
-	api.RegisterDEMServer(serverRegistrar, service)
-	err = serverRegistrar.Serve(listener)
-	if err != nil {
+	api.RegisterDEMServer(serverRegistrar, &service.MyDEMServer{})
+
+	if err = serverRegistrar.Serve(listener); err != nil {
 		return err
 	}
+
 	return nil
 }
