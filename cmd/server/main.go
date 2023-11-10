@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net"
 	"proteitestcase/cmd/server/service"
@@ -31,7 +32,7 @@ func runServer() error {
 	api.RegisterDEMServer(serverRegistrar, &service.MyDEMServer{})
 
 	if err = serverRegistrar.Serve(listener); err != nil {
-		return err
+		fmt.Println("failed to serve: %s" + err.Error())
 	}
 
 	return nil
