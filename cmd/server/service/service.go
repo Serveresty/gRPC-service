@@ -34,7 +34,7 @@ func (s *MyDEMServer) Connection(_ context.Context, req *api.ConnectionRequest) 
 	}, nil
 }
 
-func (s *MyDEMServer) GetInfoAboutUser(ctx context.Context, req *api.GetInfoRequest) (*api.GetInfoResponse, error) {
+func (s *MyDEMServer) GetInfoAboutUser(_ context.Context, req *api.GetInfoRequest) (*api.GetInfoResponse, error) {
 	if (req.UsersData.Id == nil) && (req.UsersData.Name == "") && (req.UsersData.Email == "") && (req.UsersData.WorkPhone == "") {
 		usersData, err := getdata.GetAllUsers()
 		if err != nil {
@@ -63,7 +63,7 @@ func (s *MyDEMServer) GetInfoAboutUser(ctx context.Context, req *api.GetInfoRequ
 	}, nil
 }
 
-func (s *MyDEMServer) CheckAbsenceStatus(ctx context.Context, req *api.AbsenceStatusRequest) (*api.AbsenceStatusResponse, error) {
+func (s *MyDEMServer) CheckAbsenceStatus(_ context.Context, req *api.AbsenceStatusRequest) (*api.AbsenceStatusResponse, error) {
 	if (req.InputAbsenceData) == (&api.InputAbsenceData{}) {
 		usersData, err := getdata.GetAllAbsence()
 		if err != nil {

@@ -1,6 +1,8 @@
 package models
 
-import "proteitestcase/pkg/api"
+import (
+	"proteitestcase/pkg/api"
+)
 
 type GotUsersData struct {
 	UsersData []*api.OutputUsersData `json:"usersData"`
