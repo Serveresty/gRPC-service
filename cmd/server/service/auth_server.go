@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	clientservice "proteitestcase/cmd/client/service"
 	"proteitestcase/pkg/api"
 
 	"google.golang.org/grpc/codes"
@@ -10,12 +9,12 @@ import (
 )
 
 type AuthServer struct {
-	userStore  clientservice.UserStore
-	jwtManager *clientservice.JWTManager
+	userStore  UserStore
+	jwtManager *JWTManager
 	api.UnimplementedAuthServiceServer
 }
 
-func NewAuthServer(userStore clientservice.UserStore, jwtManager *clientservice.JWTManager) *AuthServer {
+func NewAuthServer(userStore UserStore, jwtManager *JWTManager) *AuthServer {
 	return &AuthServer{
 		userStore:  userStore,
 		jwtManager: jwtManager,
@@ -23,12 +22,12 @@ func NewAuthServer(userStore clientservice.UserStore, jwtManager *clientservice.
 }
 
 func (server *AuthServer) Login(ctx context.Context, req *api.LoginRequest) (*api.LoginResponce, error) {
-	user, err := server.userStore.Find(req.GetLogin())
+	user, err := server.userStore.Find(req.Login)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "cannot find user: %v", err)
 	}
 
-	if user == nil || !user.IsCorrectPassword(req.GetPassword()) {
+	if user == nil || !user.IsCorrectPassword(req.Password) {
 		return nil, status.Errorf(codes.NotFound, "incorrect user data")
 	}
 

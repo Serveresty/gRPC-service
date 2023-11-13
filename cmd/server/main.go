@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"net"
-	clientservice "proteitestcase/cmd/client/service"
 	"proteitestcase/cmd/server/service"
 	"proteitestcase/internal/config"
 	"proteitestcase/pkg/api"
@@ -31,20 +30,16 @@ func unaryInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, 
 	return handler(ctx, req)
 }
 
-func seedUser(userStore clientservice.UserStore) error {
+func seedUser(userStore service.UserStore) error {
 	login, password, err := config.GetAuthData()
 	if err != nil {
 		return err
 	}
-	err = createUser(userStore, login, password)
-	if err != nil {
-		return err
-	}
-	return createUser(userStore, "admin", "admin")
+	return createUser(userStore, login, password)
 }
 
-func createUser(userStore clientservice.UserStore, login string, password string) error {
-	user, err := clientservice.NewUser(login, password)
+func createUser(userStore service.UserStore, login string, password string) error {
+	user, err := service.NewUser(login, password)
 	if err != nil {
 		return err
 	}
@@ -59,12 +54,12 @@ func main() {
 }
 
 func runServer() error {
-	userStore := clientservice.NewInMemUserStore()
+	userStore := service.NewInMemUserStore()
 	err := seedUser(userStore)
 	if err != nil {
 		return err
 	}
-	jwtManager := clientservice.NewJWTManager(secretKey, tokenDuration)
+	jwtManager := service.NewJWTManager(secretKey, tokenDuration)
 	authServer := service.NewAuthServer(userStore, jwtManager)
 
 	address, err1 := config.GetServerConnectionData()
@@ -85,7 +80,7 @@ func runServer() error {
 	serverRegistrar := grpc.NewServer(opts...)
 
 	api.RegisterAuthServiceServer(serverRegistrar, authServer)
-	api.RegisterDEMServer(serverRegistrar, &service.MyDEMServer{})
+	//api.RegisterDEMServer(serverRegistrar, &service.MyDEMServer{})
 
 	listener, err := net.Listen("tcp", address)
 	if err != nil {

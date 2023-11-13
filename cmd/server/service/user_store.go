@@ -1,4 +1,4 @@
-package clientservice
+package service
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 
 type UserStore interface {
 	Save(user *User) error
-	Find(username string) (*User, error)
+	Find(login string) (*User, error)
 }
 
 type InMemUserStore struct {
@@ -30,6 +30,7 @@ func (store *InMemUserStore) Save(user *User) error {
 	}
 
 	store.users[user.Login] = user.Clone()
+	fmt.Println(store.users[user.Login])
 	return nil
 }
 
