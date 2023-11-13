@@ -43,6 +43,20 @@ func runClient() error {
 	}
 	defer conn.Close()
 
+	c2 := api.NewAuthServiceClient(conn)
+
+	login, password, err := config.GetAuthData()
+	if err != nil {
+		return err
+	}
+
+	resp2, err := c2.Login(context.Background(), &api.LoginRequest{Login: login, Password: password})
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(resp2)
+
 	c := api.NewDEMClient(conn)
 
 	resp, err := c.GetInfoAboutUser(context.Background(), &api.GetInfoRequest{UsersData: &api.InputUsersData{}})

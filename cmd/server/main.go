@@ -1,13 +1,16 @@
 package main
 
 import (
+	"context"
 	"crypto/tls"
 	"fmt"
 	"log"
 	"net"
+	clientservice "proteitestcase/cmd/client/service"
 	"proteitestcase/cmd/server/service"
 	"proteitestcase/internal/config"
 	"proteitestcase/pkg/api"
+	"time"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -18,6 +21,37 @@ var (
 	keyFile = "./internal/server_data/openssl/server.key"
 )
 
+const (
+	secretKey     = "ultra-very-strong-secret-key"
+	tokenDuration = 15 * time.Minute
+)
+
+func unaryInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	log.Println("--> unary interceptor: ", info.FullMethod)
+	return handler(ctx, req)
+}
+
+func seedUser(userStore clientservice.UserStore) error {
+	login, password, err := config.GetAuthData()
+	if err != nil {
+		return err
+	}
+	err = createUser(userStore, login, password)
+	if err != nil {
+		return err
+	}
+	return createUser(userStore, "admin", "admin")
+}
+
+func createUser(userStore clientservice.UserStore, login string, password string) error {
+	user, err := clientservice.NewUser(login, password)
+	if err != nil {
+		return err
+	}
+
+	return userStore.Save(user)
+}
+
 func main() {
 	if err := runServer(); err != nil {
 		log.Fatal(err)
@@ -25,6 +59,14 @@ func main() {
 }
 
 func runServer() error {
+	userStore := clientservice.NewInMemUserStore()
+	err := seedUser(userStore)
+	if err != nil {
+		return err
+	}
+	jwtManager := clientservice.NewJWTManager(secretKey, tokenDuration)
+	authServer := service.NewAuthServer(userStore, jwtManager)
+
 	address, err1 := config.GetServerConnectionData()
 	if err1 != nil {
 		return err1
@@ -36,10 +78,13 @@ func runServer() error {
 	}
 
 	opts := []grpc.ServerOption{
+		grpc.UnaryInterceptor(unaryInterceptor),
 		grpc.Creds(credentials.NewServerTLSFromCert(&cert)),
 	}
 
 	serverRegistrar := grpc.NewServer(opts...)
+
+	api.RegisterAuthServiceServer(serverRegistrar, authServer)
 	api.RegisterDEMServer(serverRegistrar, &service.MyDEMServer{})
 
 	listener, err := net.Listen("tcp", address)
