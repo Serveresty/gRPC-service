@@ -22,7 +22,6 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DEMClient interface {
-	Connection(ctx context.Context, in *ConnectionRequest, opts ...grpc.CallOption) (*ConnectionResponse, error)
 	GetInfoAboutUser(ctx context.Context, in *GetInfoRequest, opts ...grpc.CallOption) (*GetInfoResponse, error)
 	CheckAbsenceStatus(ctx context.Context, in *AbsenceStatusRequest, opts ...grpc.CallOption) (*AbsenceStatusResponse, error)
 }
@@ -33,15 +32,6 @@ type dEMClient struct {
 
 func NewDEMClient(cc grpc.ClientConnInterface) DEMClient {
 	return &dEMClient{cc}
-}
-
-func (c *dEMClient) Connection(ctx context.Context, in *ConnectionRequest, opts ...grpc.CallOption) (*ConnectionResponse, error) {
-	out := new(ConnectionResponse)
-	err := c.cc.Invoke(ctx, "/api.DEM/Connection", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *dEMClient) GetInfoAboutUser(ctx context.Context, in *GetInfoRequest, opts ...grpc.CallOption) (*GetInfoResponse, error) {
@@ -66,7 +56,6 @@ func (c *dEMClient) CheckAbsenceStatus(ctx context.Context, in *AbsenceStatusReq
 // All implementations must embed UnimplementedDEMServer
 // for forward compatibility
 type DEMServer interface {
-	Connection(context.Context, *ConnectionRequest) (*ConnectionResponse, error)
 	GetInfoAboutUser(context.Context, *GetInfoRequest) (*GetInfoResponse, error)
 	CheckAbsenceStatus(context.Context, *AbsenceStatusRequest) (*AbsenceStatusResponse, error)
 	mustEmbedUnimplementedDEMServer()
@@ -76,9 +65,6 @@ type DEMServer interface {
 type UnimplementedDEMServer struct {
 }
 
-func (UnimplementedDEMServer) Connection(context.Context, *ConnectionRequest) (*ConnectionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Connection not implemented")
-}
 func (UnimplementedDEMServer) GetInfoAboutUser(context.Context, *GetInfoRequest) (*GetInfoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetInfoAboutUser not implemented")
 }
@@ -96,24 +82,6 @@ type UnsafeDEMServer interface {
 
 func RegisterDEMServer(s grpc.ServiceRegistrar, srv DEMServer) {
 	s.RegisterService(&DEM_ServiceDesc, srv)
-}
-
-func _DEM_Connection_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ConnectionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(DEMServer).Connection(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/api.DEM/Connection",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DEMServer).Connection(ctx, req.(*ConnectionRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _DEM_GetInfoAboutUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -159,10 +127,6 @@ var DEM_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "api.DEM",
 	HandlerType: (*DEMServer)(nil),
 	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "Connection",
-			Handler:    _DEM_Connection_Handler,
-		},
 		{
 			MethodName: "GetInfoAboutUser",
 			Handler:    _DEM_GetInfoAboutUser_Handler,

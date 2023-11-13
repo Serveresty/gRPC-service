@@ -2,8 +2,6 @@ package service
 
 import (
 	"context"
-	"errors"
-	"proteitestcase/internal/config"
 	getdata "proteitestcase/internal/server_data/get_data"
 	"proteitestcase/pkg/api"
 
@@ -13,25 +11,6 @@ import (
 
 type MyDEMServer struct {
 	api.UnimplementedDEMServer
-}
-
-func (s *MyDEMServer) Connection(_ context.Context, req *api.ConnectionRequest) (*api.ConnectionResponse, error) {
-	login, password, err := config.GetAuthData()
-	if err != nil {
-		return &api.ConnectionResponse{
-			IsAccessGranted: false,
-		}, err
-	}
-
-	if (login != req.Login) || (password != req.Password) {
-		return &api.ConnectionResponse{
-			IsAccessGranted: false,
-		}, errors.New("Bad credentials")
-	}
-
-	return &api.ConnectionResponse{
-		IsAccessGranted: true,
-	}, nil
 }
 
 func (s *MyDEMServer) GetInfoAboutUser(_ context.Context, req *api.GetInfoRequest) (*api.GetInfoResponse, error) {

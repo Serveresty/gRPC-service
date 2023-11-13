@@ -8,6 +8,12 @@ import (
 	"proteitestcase/pkg/api"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
+)
+
+var (
+	hostname = "localhost"
+	crtFile  = "./internal/server_data/openssl/server.crt"
 )
 
 func main() {
@@ -22,7 +28,16 @@ func runClient() error {
 		return err
 	}
 
-	conn, err1 := grpc.Dial(address, grpc.WithInsecure())
+	creds, err := credentials.NewClientTLSFromFile(crtFile, hostname)
+	if err != nil {
+		return err
+	}
+
+	opts := []grpc.DialOption{
+		grpc.WithTransportCredentials(creds),
+	}
+
+	conn, err1 := grpc.Dial(address, opts...)
 	if err1 != nil {
 		return err1
 	}
@@ -30,35 +45,12 @@ func runClient() error {
 
 	c := api.NewDEMClient(conn)
 
-	login, password, err2 := config.GetAuthData()
-	if err2 != nil {
-		return err2
+	resp, err := c.GetInfoAboutUser(context.Background(), &api.GetInfoRequest{UsersData: &api.InputUsersData{}})
+	if err != nil {
+		return err
 	}
 
-	res, err3 := c.Connection(context.Background(), &api.ConnectionRequest{Login: login, Password: password})
-	if err3 != nil {
-		return err3
-	}
-
-	fmt.Println("Is access granted: ")
-	fmt.Println(res.IsAccessGranted)
-
-	if res.IsAccessGranted {
-		rs, er := c.GetInfoAboutUser(context.Background(), &api.GetInfoRequest{UsersData: &api.InputUsersData{}})
-		if er != nil {
-			return er
-		}
-		fmt.Println(rs.Status)
-		fmt.Println(rs.UsersData)
-	}
-
-	rrs, e := c.CheckAbsenceStatus(context.Background(), &api.AbsenceStatusRequest{InputAbsenceData: &api.InputAbsenceData{}})
-	if e != nil {
-		return e
-	}
-
-	fmt.Println(rrs.Status)
-	fmt.Println(rrs.AbsenceData)
+	fmt.Println(resp)
 
 	return nil
 }
