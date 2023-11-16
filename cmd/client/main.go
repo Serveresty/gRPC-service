@@ -56,8 +56,6 @@ func runClient() error {
 		return err
 	}
 
-	fmt.Println(loginRep)
-
 	requestToken := new(service.AuthToken)
 	requestToken.Token = loginRep.Token
 

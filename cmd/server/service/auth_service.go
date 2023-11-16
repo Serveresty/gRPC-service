@@ -30,7 +30,7 @@ func (s *AuthServer) Login(ctx context.Context, in *api.LoginRequest) (*api.Logi
 	return &api.LoginResponce{Token: ""}, fmt.Errorf("Bad credentials")
 }
 
-func CheckAuth(ctx context.Context) (username string) {
+func CheckAuth(ctx context.Context) string {
 	tokenStr, err := getTokenFromContext(ctx)
 	if err != nil {
 		panic("get token from context error")
