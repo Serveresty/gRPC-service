@@ -11,3 +11,16 @@ type GotUsersData struct {
 type GotAbsenceData struct {
 	AbsenceData []*api.OutputAbsenceData `json:"absenceData"`
 }
+
+type GAbsData struct {
+	AbsenceData []AbsenceData `json:"absenceData"`
+}
+
+type AbsenceData struct {
+	Id          int64  `json:"id"`
+	PersonId    int64  `json:"personId"`
+	CreatedDate string `json:"createdDate"`
+	DateFrom    string `json:"dateFrom"`
+	DateTo      string `json:"dateTo"`
+	ReasonId    int64  `json:"reasonId"`
+}

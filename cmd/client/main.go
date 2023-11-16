@@ -64,11 +64,16 @@ func runClient() error {
 
 	cl := api.NewDEMClient(cc2)
 
-	result, err := cl.GetInfoAboutUser(context.Background(), &api.GetInfoRequest{UsersData: &api.InputUsersData{}})
+	info, err := cl.GetInfoAboutUser(context.Background(), &api.GetInfoRequest{UsersData: &api.InputUsersData{}})
 	if err != nil {
 		return err
 	}
-
-	fmt.Println(result)
+	fmt.Println(info)
+	fmt.Println("========================================")
+	abs, err := cl.CheckAbsenceStatus(context.Background(), &api.AbsenceStatusRequest{InputAbsenceData: &api.InputAbsenceData{}})
+	if err != nil {
+		return err
+	}
+	fmt.Println(abs)
 	return nil
 }

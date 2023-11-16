@@ -2,9 +2,18 @@ package getdata
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"proteitestcase/internal/server_data/get_data/models"
 	"proteitestcase/pkg/api"
+	"time"
+
+	"google.golang.org/protobuf/types/known/timestamppb"
+)
+
+var (
+	layout     = "2006-01-02T15:04:05"
+	dataLayout = "2006-01-02"
 )
 
 func GetAllAbsence() ([]*api.OutputAbsenceData, error) {
@@ -15,11 +24,37 @@ func GetAllAbsence() ([]*api.OutputAbsenceData, error) {
 
 	var absData models.GotAbsenceData
 
-	err = json.Unmarshal(data, &absData)
+	var aData models.GAbsData
+
+	err = json.Unmarshal(data, &aData)
 	if err != nil {
 		return []*api.OutputAbsenceData{}, err
 	}
 
+	fmt.Println(aData)
+
+	for _, element := range aData.AbsenceData {
+		createdDate, err := time.Parse(dataLayout, element.CreatedDate)
+		if err != nil {
+			continue
+		}
+		dateFrom, err := time.Parse(layout, element.DateFrom)
+		if err != nil {
+			continue
+		}
+		dateTo, err := time.Parse(layout, element.DateTo)
+		if err != nil {
+			continue
+		}
+		absData.AbsenceData = append(absData.AbsenceData,
+			&api.OutputAbsenceData{
+				Id:          element.Id,
+				PersonId:    element.PersonId,
+				CreatedDate: timestamppb.New(createdDate),
+				DateFrom:    timestamppb.New(dateFrom),
+				DateTo:      timestamppb.New(dateTo),
+			})
+	}
 	return absData.AbsenceData, nil
 }
 
@@ -32,7 +67,7 @@ func GetAbsenceByFilter(data *api.InputAbsenceData) ([]*api.OutputAbsenceData, e
 	var absData models.GotAbsenceData
 
 	for _, element := range absenceData {
-		if data.DateFrom.AsTime().After(element.DateFrom.AsTime()) || data.DateTo.AsTime().Before(element.DateTo.AsTime()) {
+		if data.DateFrom.AsTime().After(element.DateFrom.AsTime()) && data.DateTo.AsTime().Before(element.DateTo.AsTime()) {
 			absData.AbsenceData = append(absData.AbsenceData, element)
 		}
 		for _, elementData := range data.PersonIds {
