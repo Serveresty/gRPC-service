@@ -6,18 +6,18 @@ import (
 	"proteitestcase/internal/config/models"
 )
 
-func GetServerConnectionData() (string, error) {
+func GetServerConnectionData() (models.ServerConnection, error) {
 	connect := models.ServerConnection{}
 	data, err := GetCfg()
 	if err != nil {
-		return "", err
+		return models.ServerConnection{}, err
 	}
 
 	err = json.Unmarshal(data, &connect)
 	if err != nil {
-		return "", err
+		return models.ServerConnection{}, err
 	}
-	return connect.ConData.IP + ":" + connect.ConData.Port, nil
+	return connect, nil
 }
 
 func GetClientConnectionData() (string, error) {

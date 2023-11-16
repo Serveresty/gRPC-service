@@ -6,7 +6,9 @@ type ConnectionData struct {
 }
 
 type ServerConnection struct {
-	ConData ConnectionData `json:"serverConnectionData"`
+	ConData        ConnectionData `json:"serverConnectionData"`
+	MaxWorkerCount int            `json:"max-worker-count"`
+	MaxQueueSize   int            `json:"max-queue-size"`
 }
 
 type ClientConnection struct {

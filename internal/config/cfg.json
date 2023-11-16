@@ -5,7 +5,9 @@
     },
     "serverConnectionData": {
         "IP": "localhost",
-        "port": "8080"
+        "port": "8080",
+        "max-worker-count": 10,
+        "max-queue-size": 10
     },
     "clientConnectionData": {
         "IP": "localhost",

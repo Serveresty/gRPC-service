@@ -25,14 +25,14 @@ func main() {
 }
 
 func runServer() error {
-	address, err1 := config.GetServerConnectionData()
+	serverConData, err1 := config.GetServerConnectionData()
 	if err1 != nil {
 		return err1
 	}
 
 	authServer := service.AuthServer{}
 
-	listener, err := net.Listen("tcp", address)
+	listener, err := net.Listen("tcp", serverConData.ConData.IP+serverConData.ConData.Port)
 	if err != nil {
 		return err
 	}
