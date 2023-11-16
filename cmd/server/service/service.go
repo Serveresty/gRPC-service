@@ -13,7 +13,7 @@ type MyDEMServer struct {
 	api.UnimplementedDEMServer
 }
 
-func (s *MyDEMServer) GetInfoAboutUser(ctx context.Context, req *api.GetInfoRequest) (*api.GetInfoResponse, error) {
+func (s *MyDEMServer) GetInfoAboutUser(_ context.Context, req *api.GetInfoRequest) (*api.GetInfoResponse, error) {
 	if (req.UsersData.Id == nil) && (req.UsersData.Name == "") && (req.UsersData.Email == "") && (req.UsersData.WorkPhone == "") {
 		usersData, err := getdata.GetAllUsers()
 		if err != nil {

@@ -13,7 +13,7 @@ type AuthServer struct {
 	api.UnimplementedAuthServiceServer
 }
 
-func (s *AuthServer) Login(ctx context.Context, in *api.LoginRequest) (*api.LoginResponce, error) {
+func (s *AuthServer) Login(_ context.Context, in *api.LoginRequest) (*api.LoginResponce, error) {
 	login, password, err := config.GetAuthData()
 	if err != nil {
 		return nil, err
@@ -45,9 +45,9 @@ func CheckAuth(ctx context.Context) string {
 		if token.Header["alg"] != "HS256" {
 			panic("ErrInvalidAlgorithm")
 		}
-		secretKey, err := config.GetSecretKey()
-		if err != nil {
-			return nil, err
+		secretKey, err1 := config.GetSecretKey()
+		if err1 != nil {
+			return nil, err1
 		}
 		return []byte(secretKey), nil
 	})

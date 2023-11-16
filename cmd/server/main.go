@@ -8,7 +8,6 @@ import (
 	"proteitestcase/cmd/server/service"
 	"proteitestcase/internal/config"
 	"proteitestcase/pkg/api"
-	"time"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -17,10 +16,6 @@ import (
 var (
 	crtFile = "./internal/server_data/openssl/server.crt"
 	keyFile = "./internal/server_data/openssl/server.key"
-)
-
-const (
-	tokenDuration = 15 * time.Minute
 )
 
 func main() {

@@ -24,10 +24,7 @@ func (*AuthToken) RequireTransportSecurity() bool {
 
 func IsCorrectPassword(hashedPassword, password string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }
 
 func HashPassword(password string) (string, error) {
@@ -48,7 +45,7 @@ func CreateToken(login string) (string, error) {
 	return token.SignedString([]byte(secretKey))
 }
 
-func (t AuthToken) GetRequestMetadata(ctx context.Context, uri ...string) (map[string]string, error) {
+func (t AuthToken) GetRequestMetadata(_ context.Context, _ ...string) (map[string]string, error) {
 	return map[string]string{
 		"authorization": t.Token,
 	}, nil
