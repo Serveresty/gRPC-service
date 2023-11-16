@@ -7,19 +7,13 @@ import (
 	"proteitestcase/cmd/server/service"
 	"proteitestcase/internal/config"
 	"proteitestcase/pkg/api"
-	"time"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 )
 
 var (
-	hostname = "localhost"
-	crtFile  = "./internal/server_data/openssl/server.crt"
-)
-
-const (
-	refreshDuration = 30 * time.Second
+	crtFile = "./internal/server_data/openssl/server.crt"
 )
 
 func main() {
@@ -34,7 +28,7 @@ func runClient() error {
 		return err
 	}
 
-	creds, err := credentials.NewClientTLSFromFile(crtFile, hostname)
+	creds, err := credentials.NewClientTLSFromFile(crtFile, address)
 	if err != nil {
 		return err
 	}
@@ -49,7 +43,10 @@ func runClient() error {
 
 	c := api.NewAuthServiceClient(cc1)
 
-	login, password := "hiro", "qwerty"
+	login, password, err := config.GetAuthData()
+	if err != nil {
+		return err
+	}
 
 	loginRep, err := c.Login(context.Background(), &api.LoginRequest{Login: login, Password: password})
 	if err != nil {

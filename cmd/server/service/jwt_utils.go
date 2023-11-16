@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"proteitestcase/internal/config"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -10,7 +11,6 @@ import (
 
 var (
 	tokenDutation = 30 * time.Minute
-	secretKey     = "ultra-very-strong-secret-key"
 )
 
 type AuthToken struct {
@@ -30,11 +30,21 @@ func IsCorrectPassword(hashedPassword, password string) bool {
 	return true
 }
 
+func HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+
 func CreateToken(login string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"exp":   time.Now().Add(tokenDutation).Unix(),
 		"login": login,
 	})
+
+	secretKey, err := config.GetSecretKey()
+	if err != nil {
+		return "", err
+	}
 	return token.SignedString([]byte(secretKey))
 }
 

@@ -19,15 +19,20 @@ func (s *AuthServer) Login(ctx context.Context, in *api.LoginRequest) (*api.Logi
 		return nil, err
 	}
 
-	if login == in.Login && IsCorrectPassword(password, in.Password) {
+	hashPass, err := HashPassword(password)
+	if err != nil {
+		return nil, err
+	}
+
+	if login == in.Login && IsCorrectPassword(hashPass, in.Password) {
 		token, err := CreateToken(in.Login)
 		if err != nil {
-			return &api.LoginResponce{Token: ""}, fmt.Errorf("Error while creating token")
+			return nil, fmt.Errorf("Error while creating token")
 		}
 		return &api.LoginResponce{Token: token}, nil
 	}
 
-	return &api.LoginResponce{Token: ""}, fmt.Errorf("Bad credentials")
+	return nil, fmt.Errorf("Bad credentials")
 }
 
 func CheckAuth(ctx context.Context) string {
@@ -39,6 +44,10 @@ func CheckAuth(ctx context.Context) string {
 	token, err := jwt.ParseWithClaims(tokenStr, &clientClaims, func(token *jwt.Token) (interface{}, error) {
 		if token.Header["alg"] != "HS256" {
 			panic("ErrInvalidAlgorithm")
+		}
+		secretKey, err := config.GetSecretKey()
+		if err != nil {
+			return nil, err
 		}
 		return []byte(secretKey), nil
 	})

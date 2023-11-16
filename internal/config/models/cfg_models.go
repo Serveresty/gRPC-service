@@ -21,3 +21,7 @@ type AuthData struct {
 type AuthArr struct {
 	AuData AuthData `json:"authData"`
 }
+
+type SecretKey struct {
+	SecretKey string `json:"secret-key"`
+}

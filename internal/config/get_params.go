@@ -48,6 +48,19 @@ func GetAuthData() (string, string, error) {
 	return connect.AuData.Login, connect.AuData.Password, nil
 }
 
+func GetSecretKey() (string, error) {
+	var secretKey models.SecretKey
+	data, err := GetCfg()
+	if err != nil {
+		return "", err
+	}
+	err = json.Unmarshal(data, &secretKey)
+	if err != nil {
+		return "", err
+	}
+	return secretKey.SecretKey, nil
+}
+
 func GetCfg() ([]byte, error) {
 	data, err := os.ReadFile("./internal/config/cfg.json")
 	if err != nil {

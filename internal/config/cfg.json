@@ -1,7 +1,7 @@
 {
     "authData": {
         "login": "hiro",
-        "password": "$2a$10$b7swMw14H.bfRcLXHjy.KuwQ0vSzqCX/Jyd/HBiDdvjAwtaGzoT7S"
+        "password": "qwerty"
     },
     "serverConnectionData": {
         "IP": "localhost",
