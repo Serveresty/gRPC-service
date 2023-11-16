@@ -4,8 +4,10 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"proteitestcase/cmd/server/service"
 	"proteitestcase/internal/config"
 	"proteitestcase/pkg/api"
+	"time"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -14,6 +16,10 @@ import (
 var (
 	hostname = "localhost"
 	crtFile  = "./internal/server_data/openssl/server.crt"
+)
+
+const (
+	refreshDuration = 30 * time.Second
 )
 
 func main() {
@@ -33,38 +39,41 @@ func runClient() error {
 		return err
 	}
 
-	opts := []grpc.DialOption{
-		grpc.WithTransportCredentials(creds),
-	}
+	opts := grpc.WithTransportCredentials(creds)
 
-	conn, err1 := grpc.Dial(address, opts...)
+	cc1, err1 := grpc.Dial(address, opts)
 	if err1 != nil {
 		return err1
 	}
-	defer conn.Close()
+	defer cc1.Close()
 
-	c2 := api.NewAuthServiceClient(conn)
+	c := api.NewAuthServiceClient(cc1)
 
-	login, password, err := config.GetAuthData()
+	login, password := "hiro", "qwerty"
+
+	loginRep, err := c.Login(context.Background(), &api.LoginRequest{Login: login, Password: password})
 	if err != nil {
 		return err
 	}
 
-	resp2, err := c2.Login(context.Background(), &api.LoginRequest{Login: login, Password: password})
+	fmt.Println(loginRep)
+
+	requestToken := new(service.AuthToken)
+	requestToken.Token = loginRep.Token
+
+	cc2, err := grpc.Dial(address, opts, grpc.WithPerRPCCredentials(requestToken))
+	if err != nil {
+		return err
+	}
+	defer cc2.Close()
+
+	cl := api.NewDEMClient(cc2)
+
+	result, err := cl.GetInfoAboutUser(context.Background(), &api.GetInfoRequest{UsersData: &api.InputUsersData{}})
 	if err != nil {
 		return err
 	}
 
-	fmt.Println(resp2)
-
-	c := api.NewDEMClient(conn)
-
-	resp, err := c.GetInfoAboutUser(context.Background(), &api.GetInfoRequest{UsersData: &api.InputUsersData{}})
-	if err != nil {
-		return err
-	}
-
-	fmt.Println(resp)
-
+	fmt.Println(result)
 	return nil
 }

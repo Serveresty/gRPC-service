@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"crypto/tls"
 	"fmt"
 	"log"
@@ -21,31 +20,8 @@ var (
 )
 
 const (
-	secretKey     = "ultra-very-strong-secret-key"
 	tokenDuration = 15 * time.Minute
 )
-
-func unaryInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
-	log.Println("--> unary interceptor: ", info.FullMethod)
-	return handler(ctx, req)
-}
-
-func seedUser(userStore service.UserStore) error {
-	login, password, err := config.GetAuthData()
-	if err != nil {
-		return err
-	}
-	return createUser(userStore, login, password)
-}
-
-func createUser(userStore service.UserStore, login string, password string) error {
-	user, err := service.NewUser(login, password)
-	if err != nil {
-		return err
-	}
-
-	return userStore.Save(user)
-}
 
 func main() {
 	if err := runServer(); err != nil {
@@ -54,17 +30,16 @@ func main() {
 }
 
 func runServer() error {
-	userStore := service.NewInMemUserStore()
-	err := seedUser(userStore)
-	if err != nil {
-		return err
-	}
-	jwtManager := service.NewJWTManager(secretKey, tokenDuration)
-	authServer := service.NewAuthServer(userStore, jwtManager)
-
 	address, err1 := config.GetServerConnectionData()
 	if err1 != nil {
 		return err1
+	}
+
+	authServer := service.AuthServer{}
+
+	listener, err := net.Listen("tcp", address)
+	if err != nil {
+		return err
 	}
 
 	cert, err := tls.LoadX509KeyPair(crtFile, keyFile)
@@ -73,19 +48,14 @@ func runServer() error {
 	}
 
 	opts := []grpc.ServerOption{
-		grpc.UnaryInterceptor(unaryInterceptor),
 		grpc.Creds(credentials.NewServerTLSFromCert(&cert)),
 	}
 
 	serverRegistrar := grpc.NewServer(opts...)
 
-	api.RegisterAuthServiceServer(serverRegistrar, authServer)
-	//api.RegisterDEMServer(serverRegistrar, &service.MyDEMServer{})
+	api.RegisterAuthServiceServer(serverRegistrar, &authServer)
 
-	listener, err := net.Listen("tcp", address)
-	if err != nil {
-		return err
-	}
+	api.RegisterDEMServer(serverRegistrar, &service.MyDEMServer{})
 
 	if err = serverRegistrar.Serve(listener); err != nil {
 		fmt.Println("failed to serve: %s" + err.Error())

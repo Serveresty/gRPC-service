@@ -1,7 +1,7 @@
 {
     "authData": {
         "login": "hiro",
-        "password": "qwerty"
+        "password": "$2a$10$b7swMw14H.bfRcLXHjy.KuwQ0vSzqCX/Jyd/HBiDdvjAwtaGzoT7S"
     },
     "serverConnectionData": {
         "IP": "localhost",
@@ -13,5 +13,6 @@
     },
     "queueData": {
         "queueSize": 10
-    }
+    },
+    "secret-key": "ultra-very-strong-secret-key"
 }
