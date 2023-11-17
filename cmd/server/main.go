@@ -48,9 +48,11 @@ func runServer() error {
 
 	serverRegistrar := grpc.NewServer(opts...)
 
+	demServer := &service.MyDEMServer{}
+
 	api.RegisterAuthServiceServer(serverRegistrar, &authServer)
 
-	api.RegisterDEMServer(serverRegistrar, &service.MyDEMServer{})
+	api.RegisterDEMServer(serverRegistrar, demServer)
 
 	if err = serverRegistrar.Serve(listener); err != nil {
 		fmt.Println("failed to serve: %s" + err.Error())
