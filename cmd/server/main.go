@@ -32,7 +32,7 @@ func runServer() error {
 
 	authServer := service.AuthServer{}
 
-	listener, err := net.Listen("tcp", serverConData.ConData.IP+serverConData.ConData.Port)
+	listener, err := net.Listen("tcp", serverConData.ConData.IP+":"+serverConData.ConData.Port)
 	if err != nil {
 		return err
 	}

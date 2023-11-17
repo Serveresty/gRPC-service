@@ -43,7 +43,7 @@ func (s *MyDEMServer) GetInfoAboutUser(_ context.Context, req *api.GetInfoReques
 }
 
 func (s *MyDEMServer) CheckAbsenceStatus(_ context.Context, req *api.AbsenceStatusRequest) (*api.AbsenceStatusResponse, error) {
-	if (req.InputAbsenceData) == (&api.InputAbsenceData{}) {
+	if (req.InputAbsenceData.DateFrom == nil) && (req.InputAbsenceData.PersonIds == nil) && (req.InputAbsenceData.DateTo == nil) {
 		usersData, err := getdata.GetAllAbsence()
 		if err != nil {
 			return &api.AbsenceStatusResponse{

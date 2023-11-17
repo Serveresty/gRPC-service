@@ -2,7 +2,6 @@ package getdata
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"proteitestcase/internal/server_data/get_data/models"
 	"proteitestcase/pkg/api"
@@ -30,8 +29,6 @@ func GetAllAbsence() ([]*api.OutputAbsenceData, error) {
 	if err != nil {
 		return []*api.OutputAbsenceData{}, err
 	}
-
-	fmt.Println(aData)
 
 	for _, element := range aData.AbsenceData {
 		createdDate, err := time.Parse(dataLayout, element.CreatedDate)
