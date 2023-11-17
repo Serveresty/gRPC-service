@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
+	"proteitestcase/cmd/client/client"
 	"proteitestcase/cmd/server/service"
 	"proteitestcase/internal/config"
 	"proteitestcase/pkg/api"
@@ -35,7 +35,7 @@ func runClient() error {
 
 	opts := grpc.WithTransportCredentials(creds)
 
-	cc1, err1 := grpc.Dial(address, opts)
+	cc1, err1 := grpc.Dial(address, opts, grpc.WithUnaryInterceptor(client.Interceptor))
 	if err1 != nil {
 		return err1
 	}
@@ -56,7 +56,7 @@ func runClient() error {
 	requestToken := new(service.AuthToken)
 	requestToken.Token = loginRep.Token
 
-	cc2, err := grpc.Dial(address, opts, grpc.WithPerRPCCredentials(requestToken))
+	cc2, err := grpc.Dial(address, opts, grpc.WithPerRPCCredentials(requestToken), grpc.WithUnaryInterceptor(client.Interceptor))
 	if err != nil {
 		return err
 	}
@@ -68,12 +68,11 @@ func runClient() error {
 	if err != nil {
 		return err
 	}
-	fmt.Println(info)
-	fmt.Println("========================================")
+	log.Println(info)
 	abs, err := cl.CheckAbsenceStatus(context.Background(), &api.AbsenceStatusRequest{InputAbsenceData: &api.InputAbsenceData{}})
 	if err != nil {
 		return err
 	}
-	fmt.Println(abs)
+	log.Println(abs)
 	return nil
 }

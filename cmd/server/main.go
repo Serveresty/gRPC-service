@@ -44,6 +44,7 @@ func runServer() error {
 
 	opts := []grpc.ServerOption{
 		grpc.Creds(credentials.NewServerTLSFromCert(&cert)),
+		grpc.UnaryInterceptor(service.Interceptor),
 	}
 
 	serverRegistrar := grpc.NewServer(opts...)
