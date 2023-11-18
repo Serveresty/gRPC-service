@@ -1,4 +1,4 @@
-package client
+package service
 
 import (
 	"context"
@@ -10,16 +10,9 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func Interceptor(
-	ctx context.Context,
-	method string,
-	req,
-	reply interface{},
-	cc *grpc.ClientConn,
-	invoker grpc.UnaryInvoker,
-	opts ...grpc.CallOption) error {
+func GRPCLogger(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	startTime := time.Now()
-	err := invoker(ctx, method, req, reply, cc, opts...)
+	result, err := handler(ctx, req)
 	duration := time.Since(startTime)
 
 	statusCode := codes.Unknown
@@ -33,9 +26,10 @@ func Interceptor(
 	}
 
 	logger.Str("protocol", "grpc").
+		Str("method", info.FullMethod).
 		Int("status_code", int(statusCode)).
 		Str("status_text", statusCode.String()).
 		Dur("duration", duration).
-		Msg("received a gRPC response")
-	return err
+		Msg("received a gRPC request")
+	return result, err
 }

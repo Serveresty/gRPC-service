@@ -2,12 +2,14 @@ package main
 
 import (
 	"context"
-	"log"
+	"os"
 	"proteitestcase/cmd/client/client"
 	"proteitestcase/cmd/server/service"
 	"proteitestcase/internal/config"
 	"proteitestcase/pkg/api"
 
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 )
@@ -17,8 +19,9 @@ var (
 )
 
 func main() {
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	if err := runClient(); err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err)
 	}
 }
 
@@ -68,11 +71,11 @@ func runClient() error {
 	if err != nil {
 		return err
 	}
-	log.Println(info)
+	log.Print(info)
 	abs, err := cl.CheckAbsenceStatus(context.Background(), &api.AbsenceStatusRequest{InputAbsenceData: &api.InputAbsenceData{}})
 	if err != nil {
 		return err
 	}
-	log.Println(abs)
+	log.Print(abs)
 	return nil
 }
