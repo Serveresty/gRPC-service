@@ -7,6 +7,7 @@ import (
 	"net"
 	"proteitestcase/cmd/server/service"
 	"proteitestcase/internal/config"
+	"proteitestcase/internal/logger"
 	"proteitestcase/pkg/api"
 
 	"google.golang.org/grpc"
@@ -19,8 +20,9 @@ var (
 )
 
 func main() {
+	logger.InitHTTP()
 	if err := runServer(); err != nil {
-		log.Fatal(err)
+		log.Fatalf("ERROR: %v", err)
 	}
 }
 
