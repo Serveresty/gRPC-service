@@ -2,15 +2,17 @@ package service
 
 import (
 	"context"
+	"proteitestcase/logger"
 	"time"
 
-	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
 func GRPCLogger(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	lg := logger.GRPCLogger()
+
 	startTime := time.Now()
 	result, err := handler(ctx, req)
 	duration := time.Since(startTime)
@@ -20,9 +22,9 @@ func GRPCLogger(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo
 		statusCode = st.Code()
 	}
 
-	logger := log.Info()
+	logger := lg.Info()
 	if err != nil {
-		logger = log.Error().Err(err)
+		logger = lg.Error().Err(err)
 	}
 
 	logger.Str("protocol", "grpc").

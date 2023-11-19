@@ -2,9 +2,9 @@ package client
 
 import (
 	"context"
+	"proteitestcase/logger"
 	"time"
 
-	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -18,6 +18,9 @@ func Interceptor(
 	cc *grpc.ClientConn,
 	invoker grpc.UnaryInvoker,
 	opts ...grpc.CallOption) error {
+
+	lg := logger.GRPCLogger()
+
 	startTime := time.Now()
 	err := invoker(ctx, method, req, reply, cc, opts...)
 	duration := time.Since(startTime)
@@ -27,9 +30,9 @@ func Interceptor(
 		statusCode = st.Code()
 	}
 
-	logger := log.Info()
+	logger := lg.Info()
 	if err != nil {
-		logger = log.Error().Err(err)
+		logger = lg.Error().Err(err)
 	}
 
 	logger.Str("protocol", "grpc").

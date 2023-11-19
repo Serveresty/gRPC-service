@@ -1,0 +1,6 @@
+{"level":"info","protocol":"grpc","method":"/api.AuthService/Login","status_code":0,"status_text":"OK","duration":1643.0599,"time":"2023-11-19T04:38:37+03:00","message":"received a gRPC request"}
+{"level":"info","protocol":"grpc","status_code":0,"status_text":"OK","duration":1967.4108,"time":"2023-11-19T04:38:37+03:00","message":"received a gRPC response"}
+{"level":"info","protocol":"grpc","method":"/api.DEM/GetInfoAboutUser","status_code":0,"status_text":"OK","duration":0,"time":"2023-11-19T04:38:37+03:00","message":"received a gRPC request"}
+{"level":"info","protocol":"grpc","status_code":0,"status_text":"OK","duration":313.3567,"time":"2023-11-19T04:38:37+03:00","message":"received a gRPC response"}
+{"level":"info","protocol":"grpc","method":"/api.DEM/CheckAbsenceStatus","status_code":0,"status_text":"OK","duration":0,"time":"2023-11-19T04:38:37+03:00","message":"received a gRPC request"}
+{"level":"info","protocol":"grpc","status_code":0,"status_text":"OK","duration":1.055,"time":"2023-11-19T04:38:37+03:00","message":"received a gRPC response"}
