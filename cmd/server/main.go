@@ -3,13 +3,11 @@ package main
 import (
 	"crypto/tls"
 	"net"
-	"os"
 	"proteitestcase/cmd/server/service"
 	"proteitestcase/internal/config"
+	"proteitestcase/logger"
 	"proteitestcase/pkg/api"
 
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 )
@@ -20,42 +18,50 @@ var (
 )
 
 func main() {
-	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+	// Init loggers
+	lg := logger.ErrorWarningLogger()
+	debugLg := logger.DebugLogger()
+
+	// Get server connection data from json config
 	serverConData, err1 := config.GetServerConnectionData()
 	if err1 != nil {
-		log.Fatal().Err(err1).Msg("cannot get server connection data")
+		lg.Fatal().Err(err1).Msg("cannot get server connection data")
 	}
+	debugLg.Debug().Str("action", "get server connection data from json config success")
 
-	authServer := service.AuthServer{}
-
+	// Listen server
 	listener, err := net.Listen("tcp", serverConData.ConData.IP+":"+serverConData.ConData.Port)
 	if err != nil {
-		log.Fatal().Err(err).Msg("cannot start HTTP gateway server")
+		lg.Fatal().Err(err).Msg("cannot start gRPC server")
 	}
+	debugLg.Debug().Msgf("start gRPC server at %s", listener.Addr().String())
 
-	log.Info().Msgf("start HTTP gateway server at %s", listener.Addr().String())
-
+	// Load keys and certificates for TLS
 	cert, err := tls.LoadX509KeyPair(crtFile, keyFile)
 	if err != nil {
-		log.Fatal().Err(err).Msg("cannot get TLS key pairs for server")
+		lg.Fatal().Err(err).Msg("cannot get TLS key pairs for server")
 	}
-	log.Info().Msgf("loaded TLS key pairs")
+	debugLg.Debug().Msg("loaded TLS key pairs")
 
 	opts := []grpc.ServerOption{
 		grpc.Creds(credentials.NewServerTLSFromCert(&cert)),
 		grpc.UnaryInterceptor(service.GRPCLogger),
 	}
 
+	// New gRPC server
 	serverRegistrar := grpc.NewServer(opts...)
-	log.Info().Msg("start gRPC server")
+	debugLg.Debug().Msg("start gRPC server")
 
+	// Init DEM server struct
 	demServer := &service.MyDEMServer{}
 
-	api.RegisterAuthServiceServer(serverRegistrar, &authServer)
+	// Init Auth server struct
+	authServer := service.AuthServer{}
 
+	api.RegisterAuthServiceServer(serverRegistrar, &authServer)
 	api.RegisterDEMServer(serverRegistrar, demServer)
 
 	if err = serverRegistrar.Serve(listener); err != nil {
-		log.Fatal().Err(err).Msg("cannot start gRPC server")
+		lg.Fatal().Err(err).Msg("cannot start gRPC server")
 	}
 }

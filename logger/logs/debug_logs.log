@@ -1,0 +1,13 @@
+{"level":"debug","time":"2023-11-19T05:13:29+03:00","message":"start HTTP gateway server at 127.0.0.1:8080"}
+{"level":"debug","time":"2023-11-19T05:13:29+03:00","message":"loaded TLS key pairs"}
+{"level":"debug","time":"2023-11-19T05:13:29+03:00","message":"start gRPC server"}
+{"level":"debug","time":"2023-11-20T06:03:25+03:00","message":"start gRPC server at 127.0.0.1:8080"}
+{"level":"debug","time":"2023-11-20T06:03:25+03:00","message":"loaded TLS key pairs"}
+{"level":"debug","time":"2023-11-20T06:07:34+03:00","message":"start gRPC server at 127.0.0.1:8080"}
+{"level":"debug","time":"2023-11-20T06:07:34+03:00","message":"loaded TLS key pairs"}
+{"level":"debug","time":"2023-11-20T06:08:29+03:00","message":"start gRPC server at 127.0.0.1:8080"}
+{"level":"debug","time":"2023-11-20T06:08:30+03:00","message":"loaded TLS key pairs"}
+{"level":"debug","time":"2023-11-20T06:10:25+03:00","message":"start gRPC server at 127.0.0.1:8080"}
+{"level":"debug","time":"2023-11-20T06:10:25+03:00","message":"loaded TLS key pairs"}
+{"level":"debug","time":"2023-11-20T06:13:21+03:00","message":"start gRPC server at 127.0.0.1:8080"}
+{"level":"debug","time":"2023-11-20T06:13:21+03:00","message":"loaded TLS key pairs"}
