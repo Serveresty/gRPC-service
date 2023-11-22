@@ -17,10 +17,10 @@ type GAbsData struct {
 }
 
 type AbsenceData struct {
-	Id          int64  `json:"id"`
-	PersonId    int64  `json:"personId"`
 	CreatedDate string `json:"createdDate"`
 	DateFrom    string `json:"dateFrom"`
 	DateTo      string `json:"dateTo"`
+	Id          int64  `json:"id"`
+	PersonId    int64  `json:"personId"`
 	ReasonId    int64  `json:"reasonId"`
 }

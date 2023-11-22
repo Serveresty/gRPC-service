@@ -1,3 +1,6 @@
 {"level":"debug","time":"2023-11-22T21:01:35+03:00","message":"start gRPC server at 127.0.0.1:8080"}
 {"level":"debug","time":"2023-11-22T21:01:35+03:00","message":"loaded TLS key pairs"}
 {"level":"debug","time":"2023-11-22T21:01:35+03:00","message":"start gRPC server"}
+{"level":"debug","time":"2023-11-22T21:52:49+03:00","message":"start gRPC server at 127.0.0.1:8080"}
+{"level":"debug","time":"2023-11-22T21:52:49+03:00","message":"loaded TLS key pairs"}
+{"level":"debug","time":"2023-11-22T21:52:49+03:00","message":"start gRPC server"}
