@@ -12,7 +12,7 @@ var (
 )
 
 func GRPCLogger() zerolog.Logger {
-	f, err := os.OpenFile("./logger/logs/grpc_logs.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	f, err := os.OpenFile("./logger/logs/grpc_logs.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0600)
 
 	if err != nil {
 		fmt.Printf("error opening grpc logs file: %v", err)
@@ -23,7 +23,7 @@ func GRPCLogger() zerolog.Logger {
 }
 
 func HTTPLogger() zerolog.Logger {
-	f, err := os.OpenFile("./logger/logs/http_logs.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	f, err := os.OpenFile("./logger/logs/http_logs.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0600)
 
 	if err != nil {
 		fmt.Printf("error opening http logs file: %v", err)
@@ -34,7 +34,7 @@ func HTTPLogger() zerolog.Logger {
 }
 
 func ErrorWarningLogger() zerolog.Logger {
-	f, err := os.OpenFile("./logger/logs/error_warning_logs.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	f, err := os.OpenFile("./logger/logs/error_warning_logs.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0600)
 
 	if err != nil {
 		fmt.Printf("error opening http logs file: %v", err)
@@ -45,7 +45,7 @@ func ErrorWarningLogger() zerolog.Logger {
 }
 
 func DebugLogger() zerolog.Logger {
-	f, err := os.OpenFile("./logger/logs/debug_logs.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	f, err := os.OpenFile("./logger/logs/debug_logs.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0600)
 
 	if err != nil {
 		fmt.Printf("error opening http logs file: %v", err)

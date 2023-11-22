@@ -71,7 +71,8 @@ func main() {
 	}
 	log.Print(info)
 
-	abs, err := cl.CheckAbsenceStatus(context.Background(), &api.AbsenceStatusRequest{InputAbsenceData: &api.InputAbsenceData{PersonIds: []int64{1}}})
+	abs, err := cl.CheckAbsenceStatus(context.Background(), &api.AbsenceStatusRequest{
+		InputAbsenceData: &api.InputAbsenceData{PersonIds: []int64{1}}})
 	if err != nil {
 		lg.Fatal().Err(err).Msg("cannot check absence status")
 	}

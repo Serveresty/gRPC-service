@@ -18,7 +18,6 @@ func Interceptor(
 	cc *grpc.ClientConn,
 	invoker grpc.UnaryInvoker,
 	opts ...grpc.CallOption) error {
-
 	lg := logger.GRPCLogger()
 
 	startTime := time.Now()
