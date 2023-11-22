@@ -4,7 +4,7 @@
 ```proto3
     rpc Login(LoginRequest) returns (LoginResponce) {};
 ```
-<br>
+
 <p>On input "LoginRequest". Fields: login(string) and password(string)</p>
 ```proto3
     string login = 1;
