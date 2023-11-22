@@ -5,6 +5,7 @@ import (
 	"os"
 	"proteitestcase/internal/server_data/get_data/models"
 	"proteitestcase/pkg/api"
+	"proteitestcase/utils"
 )
 
 func GetAllUsers() ([]*api.OutputUsersData, error) {
@@ -33,6 +34,18 @@ func GetUsersByFilter(data *api.InputUsersData) ([]*api.OutputUsersData, error) 
 
 	for _, element := range usersData {
 		if (data.Name == element.DisplayName) || (data.WorkPhone == element.WorkPhone) || (data.Email == element.Email) {
+			if data.Email != "" {
+				var reason int64
+				abs, err := GetAbsenceByFilter(&api.InputAbsenceData{PersonIds: []int64{element.Id}})
+				if err != nil {
+					return []*api.OutputUsersData{}, err
+				}
+				for _, k := range abs {
+					reason = k.ReasonId
+				}
+
+				element.DisplayName += utils.GetEmojiById(reason)
+			}
 			dt.UsersData = append(dt.UsersData, element)
 		}
 		for _, elementData := range data.Id {

@@ -11,6 +11,7 @@ require (
 )
 
 require (
+	github.com/enescakir/emoji v1.0.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect

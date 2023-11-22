@@ -65,13 +65,13 @@ func main() {
 
 	cl := api.NewDEMClient(cc2)
 
-	info, err := cl.GetInfoAboutUser(context.Background(), &api.GetInfoRequest{UsersData: &api.InputUsersData{}})
+	info, err := cl.GetInfoAboutUser(context.Background(), &api.GetInfoRequest{UsersData: &api.InputUsersData{Email: "petrovich@mail.ru"}})
 	if err != nil {
 		lg.Fatal().Err(err).Msg("cannot get info about user")
 	}
 	log.Print(info)
 
-	abs, err := cl.CheckAbsenceStatus(context.Background(), &api.AbsenceStatusRequest{InputAbsenceData: &api.InputAbsenceData{}})
+	abs, err := cl.CheckAbsenceStatus(context.Background(), &api.AbsenceStatusRequest{InputAbsenceData: &api.InputAbsenceData{PersonIds: []int64{1}}})
 	if err != nil {
 		lg.Fatal().Err(err).Msg("cannot check absence status")
 	}

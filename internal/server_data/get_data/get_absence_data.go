@@ -50,6 +50,7 @@ func GetAllAbsence() ([]*api.OutputAbsenceData, error) {
 				CreatedDate: timestamppb.New(createdDate),
 				DateFrom:    timestamppb.New(dateFrom),
 				DateTo:      timestamppb.New(dateTo),
+				ReasonId:    element.ReasonId,
 			})
 	}
 	return absData.AbsenceData, nil
@@ -68,7 +69,7 @@ func GetAbsenceByFilter(data *api.InputAbsenceData) ([]*api.OutputAbsenceData, e
 			absData.AbsenceData = append(absData.AbsenceData, element)
 		}
 		for _, elementData := range data.PersonIds {
-			if elementData == element.Id {
+			if elementData == element.PersonId {
 				absData.AbsenceData = append(absData.AbsenceData, element)
 				break
 			}

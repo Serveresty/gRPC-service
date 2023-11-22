@@ -5,16 +5,11 @@
     },
     "serverConnectionData": {
         "IP": "localhost",
-        "port": "8080",
-        "max-worker-count": 10,
-        "max-queue-size": 10
+        "port": "8080"
     },
     "clientConnectionData": {
         "IP": "localhost",
         "port": "8080"
-    },
-    "queueData": {
-        "queueSize": 10
     },
     "secret-key": "ultra-very-strong-secret-key"
 }
