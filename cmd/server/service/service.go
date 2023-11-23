@@ -15,10 +15,10 @@ type MyDEMServer struct {
 }
 
 func (s *MyDEMServer) GetInfoAboutUser(ctx context.Context, req *api.GetInfoRequest) (*api.GetInfoResponse, error) {
-	_, err := CheckAuth(ctx)
+	/* _, err := CheckAuth(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("Not authenticated: %v", err)
-	}
+	} */
 	if (req.UsersData.Id == nil) && (req.UsersData.Name == "") && (req.UsersData.Email == "") && (req.UsersData.WorkPhone == "") {
 		usersData, err := getdata.GetAllUsers()
 		if err != nil {
