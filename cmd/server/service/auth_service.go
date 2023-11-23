@@ -35,15 +35,15 @@ func (s *AuthServer) Login(_ context.Context, in *api.LoginRequest) (*api.LoginR
 	return nil, fmt.Errorf("Bad credentials")
 }
 
-func CheckAuth(ctx context.Context) string {
+func CheckAuth(ctx context.Context) (string, error) {
 	tokenStr, err := getTokenFromContext(ctx)
 	if err != nil {
-		panic("get token from context error")
+		return "", fmt.Errorf("get token from context error: %v", err)
 	}
 	var clientClaims Claims
 	token, err := jwt.ParseWithClaims(tokenStr, &clientClaims, func(token *jwt.Token) (interface{}, error) {
 		if token.Header["alg"] != "HS256" {
-			panic("ErrInvalidAlgorithm")
+			return "", fmt.Errorf("Error Invalid Algorithm: %v", err)
 		}
 		secretKey, err1 := config.GetSecretKey()
 		if err1 != nil {
@@ -52,12 +52,12 @@ func CheckAuth(ctx context.Context) string {
 		return []byte(secretKey), nil
 	})
 	if err != nil {
-		panic("jwt parse error")
+		return "", fmt.Errorf("jwt parse error: %v", err)
 	}
 
 	if !token.Valid {
-		panic("ErrInvalidToken")
+		return "", fmt.Errorf("Err Invalid Token: %v", err)
 	}
 
-	return clientClaims.Login
+	return clientClaims.Login, nil
 }

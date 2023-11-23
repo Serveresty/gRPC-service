@@ -1,0 +1,5 @@
+{"level":"fatal","error":"rpc error: code = Unknown desc = Not authenticated: get token from context error: ErrNoAuthorizationInMetadata","time":"2023-11-23T09:43:43+03:00","message":"cannot get info about user"}
+{"level":"fatal","error":"rpc error: code = Unknown desc = Not authenticated: get token from context error: ErrNoAuthorizationInMetadata","time":"2023-11-23T09:45:19+03:00","message":"cannot get info about user"}
+{"level":"fatal","error":"rpc error: code = Unknown desc = Not authenticated: get token from context error: ErrNoAuthorizationInMetadata","time":"2023-11-23T09:46:08+03:00","message":"cannot get info about user"}
+{"level":"fatal","error":"rpc error: code = Unknown desc = Not authenticated: get token from context error: ErrNoAuthorizationInMetadata","time":"2023-11-23T09:46:58+03:00","message":"cannot get info about user"}
+{"level":"fatal","error":"rpc error: code = Unknown desc = get token from context error: ErrNoAuthorizationInMetadata","time":"2023-11-23T09:48:18+03:00","message":"cannot get info about user"}

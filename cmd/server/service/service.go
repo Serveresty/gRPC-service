@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	getdata "proteitestcase/internal/server_data/get_data"
 	"proteitestcase/pkg/api"
 
@@ -13,7 +14,11 @@ type MyDEMServer struct {
 	api.UnimplementedDEMServer
 }
 
-func (s *MyDEMServer) GetInfoAboutUser(_ context.Context, req *api.GetInfoRequest) (*api.GetInfoResponse, error) {
+func (s *MyDEMServer) GetInfoAboutUser(ctx context.Context, req *api.GetInfoRequest) (*api.GetInfoResponse, error) {
+	_, err := CheckAuth(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("Not authenticated: %v", err)
+	}
 	if (req.UsersData.Id == nil) && (req.UsersData.Name == "") && (req.UsersData.Email == "") && (req.UsersData.WorkPhone == "") {
 		usersData, err := getdata.GetAllUsers()
 		if err != nil {
@@ -42,7 +47,11 @@ func (s *MyDEMServer) GetInfoAboutUser(_ context.Context, req *api.GetInfoReques
 	}, nil
 }
 
-func (s *MyDEMServer) CheckAbsenceStatus(_ context.Context, req *api.AbsenceStatusRequest) (*api.AbsenceStatusResponse, error) {
+func (s *MyDEMServer) CheckAbsenceStatus(ctx context.Context, req *api.AbsenceStatusRequest) (*api.AbsenceStatusResponse, error) {
+	_, err := CheckAuth(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("Not authenticated: %v", err)
+	}
 	if (req.InputAbsenceData.DateFrom == nil) && (req.InputAbsenceData.PersonIds == nil) && (req.InputAbsenceData.DateTo == nil) {
 		usersData, err := getdata.GetAllAbsence()
 		if err != nil {
