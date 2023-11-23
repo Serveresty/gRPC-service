@@ -20,12 +20,12 @@ func (s *MyDEMServer) GetInfoAboutUser(ctx context.Context, req *api.GetInfoRequ
 		return nil, fmt.Errorf("Not authenticated: %v", err)
 	}
 	if (req.UsersData.Id == nil) && (req.UsersData.Name == "") && (req.UsersData.Email == "") && (req.UsersData.WorkPhone == "") {
-		usersData, err := getdata.GetAllUsers()
-		if err != nil {
+		usersData, err1 := getdata.GetAllUsers()
+		if err1 != nil {
 			return &api.GetInfoResponse{
 				Status:    status.New(codes.NotFound, "").String(),
 				UsersData: []*api.OutputUsersData{},
-			}, err
+			}, err1
 		}
 		return &api.GetInfoResponse{
 			Status:    status.New(codes.OK, "").String(),
@@ -53,12 +53,12 @@ func (s *MyDEMServer) CheckAbsenceStatus(ctx context.Context, req *api.AbsenceSt
 		return nil, fmt.Errorf("Not authenticated: %v", err)
 	}
 	if (req.InputAbsenceData.DateFrom == nil) && (req.InputAbsenceData.PersonIds == nil) && (req.InputAbsenceData.DateTo == nil) {
-		usersData, err := getdata.GetAllAbsence()
-		if err != nil {
+		usersData, err1 := getdata.GetAllAbsence()
+		if err1 != nil {
 			return &api.AbsenceStatusResponse{
 				Status:      status.New(codes.NotFound, "").String(),
 				AbsenceData: []*api.OutputAbsenceData{},
-			}, err
+			}, err1
 		}
 		return &api.AbsenceStatusResponse{
 			Status:      status.New(codes.OK, "").String(),

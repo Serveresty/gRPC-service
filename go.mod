@@ -4,6 +4,7 @@ go 1.20
 
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/enescakir/emoji v1.0.0
 	github.com/rs/zerolog v1.31.0
 	golang.org/x/crypto v0.15.0
 	google.golang.org/grpc v1.59.0
@@ -11,7 +12,6 @@ require (
 )
 
 require (
-	github.com/enescakir/emoji v1.0.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
