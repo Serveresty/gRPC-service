@@ -16,12 +16,12 @@ type AuthServer struct {
 func (s *AuthServer) Login(_ context.Context, in *api.LoginRequest) (*api.LoginResponce, error) {
 	login, password, err := config.GetAuthData()
 	if err != nil {
-		return nil, err
+		return &api.LoginResponce{Token: ""}, err
 	}
 
 	hashPass, err := HashPassword(password)
 	if err != nil {
-		return nil, err
+		return &api.LoginResponce{Token: ""}, err
 	}
 
 	if login == in.Login && IsCorrectPassword(hashPass, in.Password) {
@@ -32,7 +32,7 @@ func (s *AuthServer) Login(_ context.Context, in *api.LoginRequest) (*api.LoginR
 		return &api.LoginResponce{Token: token}, nil
 	}
 
-	return nil, fmt.Errorf("Bad credentials")
+	return &api.LoginResponce{Token: ""}, fmt.Errorf("Bad credentials")
 }
 
 func CheckAuth(ctx context.Context) (string, error) {
