@@ -6,7 +6,6 @@ import (
 	"net"
 	"proteitestcase/cmd/server/service"
 	"proteitestcase/pkg/api"
-	"proteitestcase/utils"
 	"reflect"
 	"testing"
 
@@ -56,56 +55,43 @@ func TestAbsenseStatus(t *testing.T) {
 
 	tests := []struct {
 		NameTest  string
-		Id        []int64
-		Name      string
-		WorkPhone string
-		Email     string
+		PersonIds []int64
 		DateFrom  *timestamppb.Timestamp
 		DateTo    *timestamppb.Timestamp
-		Result    []*api.OutputUsersData
+		Result    []*api.OutputAbsenceData
 	}{
 		{
-			NameTest: "Get several users by ids",
-			Id:       []int64{1, 2},
-			Result: []*api.OutputUsersData{
+			NameTest:  "Get several absenses by person's ids",
+			PersonIds: []int64{1, 2},
+			Result: []*api.OutputAbsenceData{
 				{
-					Id:          1,
-					DisplayName: "Иванов Семен Петрович",
-					Email:       "petrovich@mail.ru",
-					WorkPhone:   "1111"},
+					Id:       17,
+					PersonId: 1,
+					ReasonId: 11,
+				},
 				{
-					Id:          2,
-					DisplayName: "Семенов Петр Иванович",
-					Email:       "ivanovich@mail.ru",
-					WorkPhone:   "2222"}},
+					Id:       19,
+					PersonId: 2,
+					ReasonId: 1,
+				}},
 		},
-		{
+		/* {
 			NameTest: "Get user by email/Check emoji",
-			Email:    "petrovich@mail.ru",
-			Result: []*api.OutputUsersData{
-				{
-					Id:          1,
-					DisplayName: "Иванов Семен Петрович" + utils.GetEmojiById(11),
-					Email:       "petrovich@mail.ru",
-					WorkPhone:   "1111"}},
-		},
+			Result:   []*api.OutputAbsenceData{},
+		}, */
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.NameTest, func(t *testing.T) {
-			req := &api.GetInfoRequest{UsersData: &api.InputUsersData{
-				Id:        tt.Id,
-				Name:      tt.Name,
-				WorkPhone: tt.WorkPhone,
-				Email:     tt.Email,
-				DateFrom:  tt.DateFrom,
-				DateTo:    tt.DateTo}}
-			res, err := c.GetInfoAboutUser(newCtx, req)
+			req := &api.AbsenceStatusRequest{InputAbsenceData: &api.InputAbsenceData{
+				PersonIds: tt.PersonIds,
+			}}
+			res, err := c.CheckAbsenceStatus(newCtx, req)
 			if err != nil {
-				t.Errorf("GetUserTest(%v) got an error: %v", tt.NameTest, err)
+				t.Errorf("CheckAbsenseTest(%v) got an error: %v", tt.NameTest, err)
 			}
-			if !reflect.DeepEqual(res.UsersData, tt.Result) {
-				t.Errorf("GetUserTest(%v)=%v, wanted %v", tt.NameTest, res.UsersData, tt.Result)
+			if !reflect.DeepEqual(res.AbsenceData, tt.Result) {
+				t.Errorf("CheckAbsenseTest(%v)=%v, wanted %v", tt.NameTest, res.AbsenceData, tt.Result)
 			}
 			t.Log(res)
 		})
