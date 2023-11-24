@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"proteitestcase/cmd/client/client"
-	"proteitestcase/cmd/server/service"
 	"proteitestcase/internal/config"
 	"proteitestcase/logger"
 	"proteitestcase/pkg/api"
@@ -54,10 +53,10 @@ func main() {
 		lg.Fatal().Err(err).Msg("cannot to auth by client")
 	}
 
-	requestToken := new(service.AuthToken)
-	requestToken.Token = loginRep.Token
-
-	cc2, err := grpc.Dial(address, opts, grpc.WithPerRPCCredentials(requestToken), grpc.WithUnaryInterceptor(client.Interceptor))
+	cc2, err := grpc.Dial(address, opts, grpc.WithPerRPCCredentials(
+		client.SetTokenToContext(loginRep.Token)),
+		grpc.WithUnaryInterceptor(client.Interceptor),
+	)
 	if err != nil {
 		lg.Fatal().Err(err).Msg("cannot start grpc connection by client with RPC Credentials")
 	}

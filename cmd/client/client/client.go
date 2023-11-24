@@ -2,6 +2,7 @@ package client
 
 import (
 	"context"
+	"proteitestcase/cmd/server/service"
 	"proteitestcase/logger"
 	"time"
 
@@ -40,4 +41,10 @@ func Interceptor(
 		Dur("duration", duration).
 		Msg("received a gRPC response")
 	return err
+}
+
+func SetTokenToContext(token string) *service.AuthToken {
+	requestToken := new(service.AuthToken)
+	requestToken.Token = token
+	return requestToken
 }
