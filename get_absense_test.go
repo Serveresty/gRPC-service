@@ -65,35 +65,69 @@ func TestAbsenseStatus(t *testing.T) {
 			PersonIds: []int64{1, 2},
 			Result: []*api.OutputAbsenceData{
 				{
-					Id:       17,
-					PersonId: 1,
-					ReasonId: 11,
+					Id:          17,
+					PersonId:    1,
+					ReasonId:    11,
+					CreatedDate: &timestamppb.Timestamp{Seconds: 1691971200},
+					DateFrom:    &timestamppb.Timestamp{Seconds: 1691798400},
+					DateTo:      &timestamppb.Timestamp{Seconds: 1691884799},
 				},
 				{
-					Id:       19,
-					PersonId: 2,
-					ReasonId: 1,
+					Id:          19,
+					PersonId:    2,
+					ReasonId:    1,
+					CreatedDate: &timestamppb.Timestamp{Seconds: 1691971200},
+					DateFrom:    &timestamppb.Timestamp{Seconds: 1691798400},
+					DateTo:      &timestamppb.Timestamp{Seconds: 1691884799},
 				}},
 		},
-		/* {
-			NameTest: "Get user by email/Check emoji",
-			Result:   []*api.OutputAbsenceData{},
-		}, */
+		{
+			NameTest: "Get absense by time",
+			DateFrom: &timestamppb.Timestamp{Seconds: 1691798400},
+			DateTo:   &timestamppb.Timestamp{Seconds: 1691884799},
+			Result: []*api.OutputAbsenceData{
+				{
+					Id:          17,
+					PersonId:    1,
+					ReasonId:    11,
+					CreatedDate: &timestamppb.Timestamp{Seconds: 1691971200},
+					DateFrom:    &timestamppb.Timestamp{Seconds: 1691798400},
+					DateTo:      &timestamppb.Timestamp{Seconds: 1691884799},
+				},
+				{
+					Id:          19,
+					PersonId:    2,
+					ReasonId:    1,
+					CreatedDate: &timestamppb.Timestamp{Seconds: 1691971200},
+					DateFrom:    &timestamppb.Timestamp{Seconds: 1691798400},
+					DateTo:      &timestamppb.Timestamp{Seconds: 1691884799},
+				},
+				{
+					Id:          21,
+					PersonId:    3,
+					ReasonId:    1,
+					CreatedDate: &timestamppb.Timestamp{Seconds: 1691971200},
+					DateFrom:    &timestamppb.Timestamp{Seconds: 1691798400},
+					DateTo:      &timestamppb.Timestamp{Seconds: 1691884799},
+				}},
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.NameTest, func(t *testing.T) {
 			req := &api.AbsenceStatusRequest{InputAbsenceData: &api.InputAbsenceData{
 				PersonIds: tt.PersonIds,
+				DateFrom:  tt.DateFrom,
+				DateTo:    tt.DateTo,
 			}}
 			res, err := c.CheckAbsenceStatus(newCtx, req)
 			if err != nil {
-				t.Errorf("CheckAbsenseTest(%v) got an error: %v", tt.NameTest, err)
+				t.Errorf("\nCheckAbsenseTest(%v) got an error: %v", tt.NameTest, err)
 			}
 			if !reflect.DeepEqual(res.AbsenceData, tt.Result) {
-				t.Errorf("CheckAbsenseTest(%v)=%v, wanted %v", tt.NameTest, res.AbsenceData, tt.Result)
+				t.Errorf("\nCheckAbsenseTest(%v)=%v, wanted %v", tt.NameTest, res.AbsenceData, tt.Result)
 			}
-			t.Log(res)
+			t.Logf("\nResult: %v\n", res.AbsenceData)
 		})
 	}
 }

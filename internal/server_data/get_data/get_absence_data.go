@@ -65,7 +65,7 @@ func GetAbsenceByFilter(data *api.InputAbsenceData) ([]*api.OutputAbsenceData, e
 	var absData models.GotAbsenceData
 
 	for _, element := range absenceData {
-		if data.DateFrom.AsTime().After(element.DateFrom.AsTime()) && data.DateTo.AsTime().Before(element.DateTo.AsTime()) {
+		if !data.DateFrom.AsTime().Before(element.DateFrom.AsTime()) && !data.DateTo.AsTime().After(element.DateTo.AsTime()) {
 			absData.AbsenceData = append(absData.AbsenceData, element)
 		}
 		for _, elementData := range data.PersonIds {
