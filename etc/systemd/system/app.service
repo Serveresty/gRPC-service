@@ -1,0 +1,10 @@
+[Unit]
+Description=app
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=/ProteiTestCase
+
+[Install]
+WantedBy=multi-user.target
