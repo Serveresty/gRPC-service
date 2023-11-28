@@ -24,11 +24,13 @@ func (*AuthToken) RequireTransportSecurity() bool {
 
 func IsCorrectPassword(hashedPassword, password string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+	debugLg.Debug().Str("action", "Checking is correct password")
 	return err == nil
 }
 
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	debugLg.Debug().Str("action", "Generating hash from password")
 	return string(bytes), err
 }
 
@@ -40,12 +42,15 @@ func CreateToken(login string) (string, error) {
 
 	secretKey, err := config.GetSecretKey()
 	if err != nil {
+		lg.Err(err).Msg("Error while getting secret key")
 		return "", err
 	}
+	debugLg.Debug().Str("action", "Created token")
 	return token.SignedString([]byte(secretKey))
 }
 
 func (t AuthToken) GetRequestMetadata(_ context.Context, _ ...string) (map[string]string, error) {
+	debugLg.Debug().Str("action", "Get request metadata")
 	return map[string]string{
 		"authorization": t.Token,
 	}, nil
