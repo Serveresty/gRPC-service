@@ -29,9 +29,9 @@ func (s *AuthServer) Login(_ context.Context, in *api.LoginRequest) (*api.LoginR
 	debugLg.Debug().Str("action", "Hash pass success")
 
 	if login == in.Login && IsCorrectPassword(hashPass, in.Password) {
-		token, err := CreateToken(in.Login)
-		if err != nil {
-			lg.Err(err).Msg("Error while creating token")
+		token, err1 := CreateToken(in.Login)
+		if err1 != nil {
+			lg.Err(err1).Msg("Error while creating token")
 			return nil, fmt.Errorf("Error while creating token")
 		}
 		debugLg.Debug().Str("action", "Login success")

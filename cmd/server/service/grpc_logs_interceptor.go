@@ -11,7 +11,7 @@ import (
 )
 
 func GRPCLogger(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
-	lg := logger.GRPCLogger()
+	lg = logger.GRPCLogger()
 
 	startTime := time.Now()
 	result, err := handler(ctx, req)
