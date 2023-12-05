@@ -54,4 +54,29 @@ dateFrom(time), dateTo(time)</p>
     string workPhone = 4;
 ```
 
-<p>(2) RPC CheckAbsenceStatus:
+<p>(2) RPC CheckAbsenceStatus: On input "AbsenceStatusRequest". Fields: InputAbsenceData</p>
+<p>InputAbsenceData. Fields: personIds(int64 array), dateFrom(time), dateTo(time)</p>
+
+```
+    repeated int64 personIds = 1;
+    google.protobuf.Timestamp dateFrom = 2;
+    google.protobuf.Timestamp dateTo = 3;
+```
+
+<p>RPC CheckAbsenceStatus: On output "AbsenceStatusResponse". Fields: status(string), array of structs "OutputAbsenceData"</p>
+
+```
+    string status = 1;
+    repeated OutputAbsenceData absenceData = 2;
+```
+
+<p>OutputAbsenceData. Fields: id(int64), personId(int64), createdDate(time), dateFrom(time), dateTo(time), reasonId(int64)</p>
+
+```
+    int64 id = 1;
+    int64 personId = 2;
+    google.protobuf.Timestamp createdDate = 3;
+    google.protobuf.Timestamp dateFrom = 4;
+    google.protobuf.Timestamp dateTo = 5;
+    int64 reasonId = 6;
+```
